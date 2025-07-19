@@ -54,6 +54,7 @@ coverage/
 license.txt
 readme.html
 wordpress/
+upload.txt
 
 # ----------------------
 # Composer and npm lock files (optional)

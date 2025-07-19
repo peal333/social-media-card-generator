@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Social Media Card Generator
  * Description:       Allows users to easily create custom social media cards for posts directly within the WordPress Post Creation/Edit page.
- * Version:           1.0
+ * Version:           1.2
  * Author:            Panupan Sriautharawong
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -17,7 +17,6 @@ if (!defined('ABSPATH')) {
 define('SMCG_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('SMCG_FONT_PATH', SMCG_PLUGIN_DIR . 'fonts/OpenSans-Regular.ttf');
 define('SMCG_MAX_IMAGE_SIZE', 5 * 1024 * 1024); // 5MB limit
-define('SMCG_MEMORY_LIMIT', '256M');
 
 class SocialMediaCardGeneratorPlugin {
 
@@ -92,17 +91,19 @@ class SocialMediaCardGeneratorPlugin {
         }
         
         if ($font_check === 'missing') {
-            $notices[] = sprintf(
-                __('For best results, please upload %s to the %s directory. A system font will be used as fallback.', 'social-media-card-generator'),
+            /* translators: 1: The font file name (e.g., OpenSans-Regular.ttf). 2: The directory path (e.g., wp-content/plugins/social-media-card-generator/fonts/). */
+            $notices[] = sprintf( __('For best results, please upload %1$s to the %2$s directory. A system font will be used as fallback.', 'social-media-card-generator'),
                 '<code>OpenSans-Regular.ttf</code>',
                 '<code>wp-content/plugins/social-media-card-generator/fonts/</code>'
             );
         }
         
         foreach ($notices as $notice) {
-            printf('<div class="notice notice-warning"><p><strong>%s:</strong> %s</p></div>', 
-                   esc_html__('Social Media Card Generator', 'social-media-card-generator'), 
-                   $notice);
+            printf(
+                '<div class="notice notice-warning"><p><strong>%s:</strong> %s</p></div>',
+                esc_html__('Social Media Card Generator', 'social-media-card-generator'),
+                wp_kses($notice, ['code' => []])
+            );
         }
     }
 
@@ -294,7 +295,8 @@ class SocialMediaCardGeneratorPlugin {
         $font_path = $this->get_font_path();
         if (!$font_path) wp_send_json_error(['message' => __('No suitable font found on the server.', 'social-media-card-generator')]);
         
-        ini_set('memory_limit', SMCG_MEMORY_LIMIT);
+        // Use the WordPress function to safely increase memory for image processing.
+        wp_raise_memory_limit('image');
         
         $title = isset($_POST['title']) ? sanitize_text_field(wp_unslash($_POST['title'])) : '';
         $description = isset($_POST['description']) ? sanitize_textarea_field(wp_unslash($_POST['description'])) : '';
@@ -444,6 +446,7 @@ class SocialMediaCardGeneratorPlugin {
         $attachment = [
             'guid'           => $upload_dir['url'] . '/' . $filename,
             'post_mime_type' => $mime_type,
+            /* translators: %s: The title of the post. */
             'post_title'     => sprintf(__('Social Card: %s', 'social-media-card-generator'), $title),
             'post_content'   => '',
             'post_status'    => 'inherit'
@@ -451,7 +454,8 @@ class SocialMediaCardGeneratorPlugin {
         
         $attach_id = wp_insert_attachment($attachment, $filepath, $post_id);
         if (is_wp_error($attach_id)) {
-            @unlink($filepath);
+            // Use the WordPress alternative to unlink().
+            wp_delete_file($filepath);
             return $attach_id;
         }
         
