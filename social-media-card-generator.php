@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Social Media Card Generator
  * Description:       Allows users to easily create custom social media cards for posts directly within the WordPress Post Creation/Edit page.
- * Version:           1.4.0
+ * Version:           1.4.1
  * Author:            Panupan Sriautharawong
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -14,6 +14,10 @@ namespace peal333\socialmediacardgenerator;
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
+
+// Get the plugin version dynamically from the plugin header.
+$plugin_data = get_file_data(__FILE__, ['Version' => 'Version'], 'plugin');
+define('SOCIALMCG_VERSION', !empty($plugin_data['Version']) ? $plugin_data['Version'] : '1.4.1');
 
 // Define constants
 define('SOCIALMCG_PLUGIN_DIR', plugin_dir_path(__FILE__));
@@ -58,12 +62,12 @@ class SocialMediaCardGeneratorPlugin {
         }
         
         // Set default options
-        add_option('socialmcg_title_font_size', 70);
+        add_option('socialmcg_title_font_size', 82);
         add_option('socialmcg_description_font_size', 42);
         add_option('socialmcg_title_y_position', 50);
         add_option('socialmcg_description_y_position', 88);
         add_option('socialmcg_output_format', 'jpeg');
-        add_option('socialmcg_jpeg_quality', 77);
+        add_option('socialmcg_jpeg_quality', 70);
     }
 
     /**
@@ -536,8 +540,8 @@ class SocialMediaCardGeneratorPlugin {
      */
     private function enqueue_admin_styles() {
         // We use a dummy handle because we are only adding inline styles.
-        // This is a common practice to avoid creating an unnecessary CSS file.
-        wp_register_style('socialmcg-admin-styles', false);
+        // The version number is included for consistency and best practice.
+        wp_register_style('socialmcg-admin-styles', false, [], SOCIALMCG_VERSION);
         wp_enqueue_style('socialmcg-admin-styles');
 
         $custom_css = "
@@ -584,7 +588,8 @@ class SocialMediaCardGeneratorPlugin {
      */
     private function enqueue_admin_scripts($hook) {
         // We use a dummy handle here as well, with dependencies on jQuery.
-        wp_register_script('socialmcg-admin-scripts', false, ['jquery'], null, true);
+        // The version number is included for consistency and best practice.
+        wp_register_script('socialmcg-admin-scripts', false, ['jquery'], SOCIALMCG_VERSION, true);
         wp_enqueue_script('socialmcg-admin-scripts');
         
         $post_id = get_the_ID();

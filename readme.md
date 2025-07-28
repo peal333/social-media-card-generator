@@ -4,7 +4,7 @@
 *   **Tags:** social media card, card generator, open graph, facebook card, twitter card
 *   **Requires at least:** 5.0
 *   **Tested up to:** 6.8
-*   **Stable tag:** 1.4.0
+*   **Stable tag:** 1.4.1
 *   **License:** GPLv2 or later
 *   **License URI:** https://www.gnu.org/licenses/gpl-2.0.html
 *   **GitHub Repository:** [https://github.com/peal333/social-media-card-generator](https://github.com/peal333/social-media-card-generator)
