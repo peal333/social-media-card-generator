@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Social Media Card Generator
  * Description:       Allows users to easily create custom social media cards for posts directly within the WordPress Post Creation/Edit page.
- * Version:           1.4.1
+ * Version:           1.4.2
  * Author:            Panupan Sriautharawong
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
 
 // Get the plugin version dynamically from the plugin header.
 $plugin_data = get_file_data(__FILE__, ['Version' => 'Version'], 'plugin');
-define('SOCIALMCG_VERSION', !empty($plugin_data['Version']) ? $plugin_data['Version'] : '1.4.1');
+define('SOCIALMCG_VERSION', !empty($plugin_data['Version']) ? $plugin_data['Version'] : '1.4.2');
 
 // Define constants
 define('SOCIALMCG_PLUGIN_DIR', plugin_dir_path(__FILE__));
