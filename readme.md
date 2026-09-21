@@ -1,97 +1,207 @@
+![Social Media Card Generator](artwork/readme-hero.png)
+
 # Social Media Card Generator
 
-*   **Contributors:** peal333
-*   **Tags:** social media card, card generator, open graph, facebook card, twitter card
-*   **Requires at least:** 5.0
-*   **Tested up to:** 6.8
-*   **Stable tag:** 1.4.2
-*   **License:** GPLv2 or later
-*   **License URI:** https://www.gnu.org/licenses/gpl-2.0.html
-*   **GitHub Repository:** [https://github.com/peal333/social-media-card-generator](https://github.com/peal333/social-media-card-generator)
+Social Media Card Generator is a WordPress plugin for creating branded Open Graph/social sharing images directly from the post editor. Cards are rendered on your server with PHP GD and saved to the WordPress Media Library.
 
-A WordPress plugin that allows users to easily create custom social media cards for posts directly from the post editor.
+Version **1.5.3** adds WordPress 7.1-compatible post-title synchronization while preserving support for Classic Editor and older block-editor implementations.
 
----
+## Quick start
 
-## Description
+1. Upload the `social-media-card-generator` folder to `/wp-content/plugins/`, or install the plugin ZIP from **Plugins > Add New > Upload Plugin**.
+2. Activate **Social Media Card Generator**.
+3. Go to **Settings > Social Media Card Generator**.
+4. Choose a template image. A **1200 × 630 px** image is recommended.
+5. Adjust the title, description, shadow, font, alignment, and output settings as needed.
+6. Save the settings.
+7. Edit a post and open the **Social Media Card Generator** panel.
+8. Enter or adjust the card title and optional description, then click **Generate Card**.
+9. After generation, the plugin confirms the saved filename and shows a preview. The new image is available in the Media Library.
 
-Social Media Card Generator adds a simple and intuitive interface to the WordPress post editor, enabling you to generate beautiful and engaging social media cards on the fly. Stop relying on whatever image social platforms decide to pull from your post. Instead, create a custom, branded image with your post's title and a short description overlaid, ensuring your content looks professional when shared on platforms like X (formerly Twitter), Facebook, and LinkedIn.
+> New posts need to be saved as a draft once before a card can be generated, because WordPress must have a post ID to attach the generated image to.
 
-The plugin uses a template image that you provide, ensuring all your social cards maintain a consistent brand identity. You can customize font sizes, text positions, and output formats directly from the settings page.
+## Settings
 
-### Key Features
+### Template
 
-*   **Seamless Integration:** Adds a "Social Media Card Generator" meta box directly to the post editor sidebar.
-*   **Custom Templates:** Upload your own branded background image to use as a template.
-*   **Dynamic Text:** Automatically populates the card with the post title and an optional custom description.
-*   **Live Preview:** Generate and preview the social card without leaving the editor.
-*   **Media Library Integration:** The generated card is automatically saved to your WordPress Media Library.
-*   **Customizable Layout:** Adjust the font size and vertical position of the title and description.
-*   **Flexible Output:** Choose between JPEG (for smaller file sizes) or PNG (for higher quality) output formats.
-*   **Quality Control:** Set the compression quality for JPEG images.
+Choose the background image that every card will use. The plugin accepts image formats supported by your server's GD installation. Template files are limited to 5 MB.
 
----
+For social sharing, a 1200 × 630 px template is a good default because it matches the common 1.91:1 Open Graph image ratio.
 
-## Installation
+### Title typography
 
-1.  Upload the `social-media-card-generator` folder to the `/wp-content/plugins/` directory.
-2.  Activate the plugin through the 'Plugins' menu in WordPress.
-3.  Go to **Settings > Social Media Card Generator** to configure the plugin.
+The title has independent controls for:
 
----
+- Font
+- Font size
+- Text color
+- Vertical position
+- Alignment: left, center, or right
 
-## Usage
+The defaults reproduce the previous hardcoded design:
 
-### 1. Configure the Settings
+- Font: **Open Sans Regular**
+- Font size: **82 px**
+- Color: **#F0F8FF**
+- Vertical position: **50%**
+- Alignment: **Center**
 
-Before you start generating cards, you need to set up a template.
+### Description typography
 
-1.  Navigate to **Settings > Social Media Card Generator** in your WordPress dashboard.
-2.  **Upload a Template Image:** Click "Select Image" to upload or choose a base image from your Media Library. This will be the background for all your generated cards. A size of **1200x630 pixels** is highly recommended for best results on social media.
-3.  **Adjust Layout & Style:**
-    *   Set the font sizes (in pixels) for the title and description.
-    *   Set the vertical (Y-Position) for the title and description. This is a percentage from the top of the image (e.g., 50% is vertically centered).
-4.  **Configure Output Settings:**
-    *   Choose your desired **Output Format**: JPEG or PNG.
-    *   If you select JPEG, you can set the **JPEG Quality** (1-100).
-5.  Click **Save Changes**.
+The optional description has its own font, size, color, vertical position, and alignment controls. Its default color is **#E0E0E0**, matching the previous hardcoded version.
 
-### 2. Generate a Card in the Post Editor
+### Text shadow
 
-1.  Create a new post or edit an existing one.
-2.  In the post editor sidebar, find the **Social Media Card Generator** meta box.
-3.  The **Title** field will be pre-filled with your post's title. You can modify it here for the card if you wish.
-4.  Optionally, add a short **Description**.
-5.  Click the **Generate Card** button.
-6.  A loading spinner will appear, and once finished, a preview of your new social card will be displayed in the meta box. The image is now saved to your Media Library.
+Text shadow is **off by default**, matching the hardcoded version. If enabled, you can configure:
 
-**Note:** You must save your post as a draft at least once before you can generate a card.
+- Shadow color
+- Opacity
+- Horizontal offset
+- Vertical offset
 
----
+### Output
+
+Cards can be saved as:
+
+- **JPEG** — smaller files, with configurable quality
+- **PNG** — lossless output
+
+Generated files are registered as normal WordPress Media Library attachments and attached to the post that created them.
+
+## Fonts
+
+Open Sans Regular is bundled with the plugin and remains the default.
+
+### Uploading a custom font
+
+1. Go to **Settings > Social Media Card Generator**.
+2. In **Font Library**, choose a `.ttf` file.
+3. Click **Upload Font**.
+4. After validation, the font will appear in both the Title and Description font selectors.
+5. To return a title or description to the bundled default, click **Use Open Sans** beside that font selector and then click **Save Changes**.
+
+Custom fonts are stored under:
+
+```text
+wp-content/uploads/social-media-card-generator/fonts/
+```
+
+The plugin does **not** enable arbitrary font uploads across the WordPress Media Library. Font uploads are restricted to administrators using the plugin settings page. The upload is checked for a `.ttf` extension, a TrueType/SFNT signature, and FreeType readability before WordPress moves it into the plugin's font directory. The plugin also scopes its MIME allowance to that authenticated upload request so other Media Library uploads are unaffected.
+
+Only upload fonts that you are licensed or otherwise permitted to use. The bundled Open Sans font is distributed under the SIL Open Font License 1.1; its license is included in `fonts/OFL.txt`.
+
+## AIOSEO integration
+
+If a compatible, active version of **All in One SEO (AIOSEO)** is detected, the post editor shows an optional checkbox:
+
+> **Use this as the AIOSEO Social Image**
+
+When checked, a successful generation sets both the Facebook and Twitter/X image sources in AIOSEO to **Custom Image** and assigns the newly generated Media Library image to both social networks. For Twitter/X, the plugin disables AIOSEO's “Use Data from Facebook Tab” setting for that post so the Twitter custom-image fields are stored explicitly.
+
+The checkbox is remembered as a **per-user preference**. Once you enable or disable it, that choice is used the next time you open the generator on another post. After a successful AIOSEO update, the plugin also synchronizes AIOSEO's live post-editor state so the Facebook and Twitter/X Custom Image fields on the current page reflect the new card without a page reload. If the image is created successfully but the AIOSEO update fails, the plugin reports those outcomes separately so the saved card is not mistaken for a failed generation.
+
+AIOSEO is not required to use Social Media Card Generator.
 
 ## Screenshots
 
-![Navigate to Settings](screenshots/1-settings-tab.png)
+### Redesigned settings page
 
-_1. The Social Media Card Generator settings page in the WordPress admin area._
+![Settings page](screenshots/1-settings.png)
 
-![Settings](screenshots/2-settings.png)
+### Typography and font controls
 
-_2. Configuring the template image, layout, and output settings._
+![Typography and font controls](screenshots/2-typography-fonts.png)
 
-![Generate Card](screenshots/3-generate-card.png)
+### Post editor, success message, preview, and AIOSEO option
 
-_3. The generator meta box in the post editor with a live preview._
-
----
+![Generate a social media card](screenshots/3-generate-card.png)
 
 ## Requirements
 
-*   **PHP GD Library:** This plugin requires the GD library to be installed and enabled on your server for image processing. The plugin will display a warning in the admin dashboard if the GD library is not detected.
-*   **Custom Font (Recommended):** For the best text rendering, the plugin is designed to use the Open Sans font. Please download `OpenSans-Regular.ttf` and place it in the following directory: `/wp-content/plugins/social-media-card-generator/fonts/`. If the font is not found, the plugin will attempt to use a common system font as a fallback.
+- WordPress 5.0 or later (tested through WordPress 7.1)
+- PHP 7.0 or later
+- PHP GD extension
+- GD compiled with FreeType support (`imagettftext()` / `imagettfbbox()`)
+- A writable WordPress uploads directory
 
----
+WebP templates additionally require WebP support in the server's GD build.
 
-## Contribute
+## Troubleshooting
 
-This is an open-source project, and we welcome contributions. If you have a bug to report or a feature to request, please open an issue or submit a pull request on our official [GitHub repository](https://github.com/peal333/social-media-card-generator).
+### The plugin says GD or FreeType is unavailable
+
+Ask your hosting provider to enable PHP GD with FreeType support. The plugin cannot render TrueType text without those functions.
+
+### A custom font will not upload
+
+Make sure the file is a TrueType `.ttf` font, is no larger than 5 MB, and is readable by the server's GD/FreeType installation. Some servers report valid TTF files with different MIME strings; version 1.5.2 handles those differences inside the plugin's own upload request. Files that are actually OpenType/CFF or another format but merely renamed to `.ttf` are still rejected.
+
+### The generated text is too close to an edge
+
+Adjust the vertical position and alignment settings. The renderer keeps a 5% horizontal margin when using left or right alignment and wraps text within 90% of the image width.
+
+### AIOSEO is installed but the checkbox does not appear
+
+The integration appears only when AIOSEO is active and exposes the supported post-model API. If AIOSEO is installed but inactive, the plugin displays a notice instead. Update and activate AIOSEO before using the integration.
+
+## Privacy and external services
+
+Social Media Card Generator does not send card content, font files, analytics, or site data to an external service. Rendering happens locally on the WordPress server. The optional AIOSEO integration communicates only with the locally installed AIOSEO plugin.
+
+## Development and WordPress.org notes
+
+The plugin uses WordPress APIs for settings, nonces, capability checks, media attachments, admin assets, file uploads, sanitization, and escaping. Admin CSS and JavaScript are bundled locally; no third-party scripts or styles are loaded from a CDN.
+
+For WordPress.org releases, copy the prepared banner, icon, and screenshot files into the repository's top-level SVN `assets/` directory rather than `trunk/`.
+
+Development repository: <https://github.com/peal333/social-media-card-generator>
+
+## Changelog
+
+### 1.5.3
+
+- Added iframe-safe card-title synchronization for WordPress 7.1 by reading the current edited post title from the `core/editor` WordPress data store.
+- Kept the DOM-based title listener as a backwards-compatible fallback for Classic Editor and older editor implementations.
+- Added `wp-data` as a post-editor-only script dependency.
+- Updated WordPress compatibility metadata through 7.1.
+
+### 1.5.2
+
+- Restored the full **Social Media Card Generator** meta-box title and removed custom header spacing so WordPress core controls the header padding/margins consistently with other post boxes.
+- Synced AIOSEO's live Vue/Pinia post-editor state after a successful social-image update so the current Facebook and Twitter/X fields refresh without a page reload.
+- Fixed valid `.ttf` uploads being rejected by WordPress on servers whose `fileinfo` MIME result differs from `font/ttf`, while keeping the MIME allowance scoped to the plugin's authenticated font-upload request.
+- Added TrueType signature and FreeType readability checks before a custom font is moved into the uploads directory.
+- Added **Use Open Sans** controls beside the title and description font selectors.
+
+### 1.5.1
+
+- Shortened and refined the post-editor meta-box header for narrow WordPress sidebars.
+- Fixed AIOSEO integration by updating its existing post model directly instead of sending an incomplete `savePost()` payload.
+- Added AIOSEO Twitter/X custom-image support alongside Facebook.
+- Added a per-user remembered AIOSEO social-image preference.
+- Added post-save verification and AIOSEO cache invalidation after social-image updates.
+
+### 1.5.0
+
+- Added independent title and description font selection.
+- Added administrator-only `.ttf` custom-font uploads stored in WordPress uploads.
+- Added title and description color controls with defaults matching the hardcoded version.
+- Added left, center, and right text alignment.
+- Added optional configurable text shadow, disabled by default.
+- Redesigned the plugin settings and post-editor interfaces.
+- Added a Media Library success message with the generated filename.
+- Fixed HTML entities showing in the generated-card title field.
+- Added optional AIOSEO Facebook-image integration.
+- Improved per-post capability checks, validation, sanitization, and output escaping.
+- Added the Open Sans license and refreshed documentation/artwork.
+- Removed development-only files from the distributable package.
+
+### 1.4.2
+
+- Initial public release.
+
+## License
+
+Social Media Card Generator is licensed under the GNU General Public License v2 or later.
+
+The bundled Open Sans font has its own SIL Open Font License 1.1; see `fonts/OFL.txt`.
