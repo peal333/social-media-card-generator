@@ -4,7 +4,7 @@
 
 Social Media Card Generator is a WordPress plugin for creating branded Open Graph/social sharing images directly from the post editor. Cards are rendered on your server with PHP GD and saved to the WordPress Media Library.
 
-Version **1.5.3** adds WordPress 7.1-compatible post-title synchronization while preserving support for Classic Editor and older block-editor implementations.
+Version **1.5.4** refines the AIOSEO integration for WordPress.org Plugin Check compliance while retaining the WordPress 7.1-compatible title synchronization and previous compatibility improvements.
 
 ## Quick start
 
@@ -157,6 +157,11 @@ For WordPress.org releases, copy the prepared banner, icon, and screenshot files
 Development repository: <https://github.com/peal333/social-media-card-generator>
 
 ## Changelog
+
+### 1.5.4
+
+- Removed the redundant direct invocation of AIOSEO's internal `aioseo_insert_post` action after social-image updates.
+- Kept the verified AIOSEO model save and metadata-cache invalidation path, avoiding duplicate save side effects while satisfying WordPress Plugin Check hook-prefix requirements.
 
 ### 1.5.3
 
