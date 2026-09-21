@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Social Media Card Generator
  * Description:       Generate branded social media cards from the WordPress post editor and save them to the Media Library.
- * Version:           1.5.3
+ * Version:           1.5.4
  * Requires at least: 5.0
  * Requires PHP:      7.0
  * Author:            Panupan Sriautharawong
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SOCIALMCG_VERSION', '1.5.3' );
+define( 'SOCIALMCG_VERSION', '1.5.4' );
 define( 'SOCIALMCG_PLUGIN_FILE', __FILE__ );
 define( 'SOCIALMCG_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SOCIALMCG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

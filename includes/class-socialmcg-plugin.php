@@ -1681,7 +1681,10 @@ final class Plugin {
 				$aioseo->meta->metaData->bustPostCache( $post_id, $saved_post );
 			}
 
-			do_action( 'aioseo_insert_post', $post_id );
+			// Do not fire AIOSEO's internal `aioseo_insert_post` action here. The model has
+			// already been saved and its metadata cache has been invalidated above. Invoking
+			// another plugin's internal save action from this plugin is unnecessary and can
+			// cause duplicate side effects in listeners owned by AIOSEO or other integrations.
 		} catch ( \Throwable $error ) {
 			return new \WP_Error( 'socialmcg_aioseo_exception', __( 'The image was saved, but AIOSEO could not be updated.', 'social-media-card-generator' ) );
 		}
